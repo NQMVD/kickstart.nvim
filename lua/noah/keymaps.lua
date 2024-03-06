@@ -176,6 +176,7 @@ nset('<leader>o', function()
 end, { desc = '[o]il (float)' })
 nset('<leader>O', '<cmd>Oil<CR>', { desc = '[O]il' })
 nset('<leader>e', '<cmd>Neotree<CR>', { desc = '[E]xplore Neotree' })
+nset('<leader>E', MiniFiles.open, { desc = '[E]xplore Neotree' })
 
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
