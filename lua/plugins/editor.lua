@@ -4,11 +4,12 @@
 -- lazygit
 -- bufferline
 -- lualine
--- toggleterm
+-- toggleterm (toggle terminals)
 -- markdown-preview
--- spectre
--- trouble
+-- spectre (search panel)
+-- trouble (diagnostics panel)
 -- illuminate (highlight word under cursor)
+-- ufo (modern folding)
 
 return {
   {
@@ -32,7 +33,7 @@ return {
 
   { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
 
-  { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' } },
+  { 'nvim-lualine/lualine.nvim', opts = {}, dependencies = { 'nvim-tree/nvim-web-devicons' } },
 
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
 
@@ -50,4 +51,20 @@ return {
   { 'folke/trouble.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }, opts = {} },
 
   { 'RRethy/vim-illuminate' },
+
+  {
+    'kevinhwang91/nvim-ufo',
+    event = 'BufEnter',
+    dependencies = {
+      'kevinhwang91/promise-async',
+    },
+    config = function()
+      --- @diagnostic disable: unused-local
+      require('ufo').setup {
+        provider_selector = function(_bufnr, _filetype, _buftype)
+          return { 'treesitter', 'indent' }
+        end,
+      }
+    end,
+  },
 }

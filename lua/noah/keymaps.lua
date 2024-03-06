@@ -4,7 +4,7 @@
 -- SHIFT + enter: i<enter><esc>
 --
 -- Leader Stuff:
--- b: work with [b]uffers
+-- b: [b]uffers
 --  - B: fzf search buffers
 --  - also split
 -- c: code
@@ -14,10 +14,11 @@
 -- d: diagnostics
 -- u: UI
 -- w: windows
+--  - resize (by 5 chars each time tho)
 -- m: minimap?
 -- y/p: void?
 -- t: terminals
---
+-- e: neo-tree explorer
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
