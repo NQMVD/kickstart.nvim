@@ -5,3 +5,7 @@
 - [ ] keymaps
 - [ ] treesj
 - [ ] oil
+- [ ] noice and notify
+
+      -- stylua: ignore
+

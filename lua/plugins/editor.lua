@@ -18,6 +18,31 @@ return {
       default_file_explorer = true,
     },
     dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('oil').setup {
+        use_default_keymaps = false,
+        keymaps = {
+          ['g?'] = 'actions.show_help',
+          ['<CR>'] = 'actions.select',
+          ['<C-\\>'] = 'actions.select_split',
+          ['<C-enter>'] = 'actions.select_vsplit', -- this is used to navigate left
+          ['<C-t>'] = 'actions.select_tab',
+          ['<C-p>'] = 'actions.preview',
+          ['<C-c>'] = 'actions.close',
+          ['<C-r>'] = 'actions.refresh',
+          ['-'] = 'actions.parent',
+          ['_'] = 'actions.open_cwd',
+          ['`'] = 'actions.cd',
+          ['~'] = 'actions.tcd',
+          ['gs'] = 'actions.change_sort',
+          ['gx'] = 'actions.open_external',
+          ['g.'] = 'actions.toggle_hidden',
+        },
+        view_options = {
+          show_hidden = true,
+        },
+      }
+    end,
   },
 
   { 'nvim-neo-tree/neo-tree.nvim', branch = 'v3.x', dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons', 'MunifTanjim/nui.nvim' } },
@@ -33,7 +58,85 @@ return {
 
   { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
 
-  { 'nvim-lualine/lualine.nvim', opts = {}, dependencies = { 'nvim-tree/nvim-web-devicons' } },
+  {
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
+    config = function()
+      local none_types = {
+        'neo-tree',
+        'dashboard',
+        'Trouble',
+      }
+
+      local function has_mode()
+        return not vim.list_contains(none_types, vim.bo.filetype)
+      end
+
+      ---@diagnostic disable-next-line: undefined-field
+      require('lualine').setup {
+        options = {
+          theme = 'catppuccin',
+          component_separators = '',
+          section_separators = { left = '', right = '' },
+        },
+        sections = {
+          -- '%=', --[[ add your center components here ]]
+          lualine_a = { { 'mode', separator = { left = '' }, right_padding = 1, cond = has_mode } },
+          lualine_b = { { 'filename', cond = has_mode } },
+          lualine_c = { { 'diagnostics', cond = has_mode } },
+          lualine_x = {
+            function()
+              return vim.lsp.client.name
+            end,
+            icon = ' LSP:',
+            color = { fg = '#ffffff', gui = 'bold' },
+          },
+          lualine_y = { 'filetype' },
+          lualine_z = {
+            { 'progress', separator = { right = '' }, left_padding = 1 },
+          },
+        },
+        inactive_sections = {
+          lualine_a = { { 'filename', cond = has_mode } },
+          lualine_b = {},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = { 'filetype' },
+        },
+        tabline = {},
+        extensions = {},
+      }
+    end,
+  },
+
+  -- {
+  --   'nvim-lualine/lualine.nvim',
+  --   event = 'VeryLazy',
+  --   config = function()
+  --     require('lualine').setup {
+  --       options = {
+  --         theme = 'catppuccin',
+  --         globalstatus = true,
+  --         component_separators = { left = '', right = '' },
+  --         section_separators = { left = '█', right = '█' },
+  --       },
+  --       sections = {
+  --         lualine_b = {
+  --           'diff',
+  --           'diagnostics',
+  --         },
+  --         lualine_c = {
+  --           { 'filename', path = 1 },
+  --         },
+  --         lualine_x = {
+  --           'filetype',
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
+  --
 
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
 
@@ -46,7 +149,35 @@ return {
     end,
   },
 
-  { 'nvim-pack/nvim-spectre', dependencies = { 'nvim-lua/plenary.nvim' } },
+  {
+    'nvim-pack/nvim-spectre',
+    lazy = true,
+    cmd = { 'Spectre' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'catppuccin/nvim',
+    },
+    config = function()
+      local theme = require('catppuccin.palettes').get_palette 'mocha'
+
+      vim.api.nvim_set_hl(0, 'SpectreSearch', { bg = theme.red, fg = theme.base })
+      vim.api.nvim_set_hl(0, 'SpectreReplace', { bg = theme.green, fg = theme.base })
+
+      require('spectre').setup {
+        highlight = {
+          search = 'SpectreSearch',
+          replace = 'SpectreReplace',
+        },
+        mapping = {
+          ['send_to_qf'] = {
+            map = '<C-q>',
+            cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
+            desc = 'send all items to quickfix',
+          },
+        },
+      }
+    end,
+  },
 
   { 'folke/trouble.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }, opts = {} },
 
