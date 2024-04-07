@@ -69,7 +69,7 @@ return {
       }
 
       local function has_mode()
-        return not vim.list_contains(none_types, vim.bo.filetype)
+        return true --not vim.list_contains(none_types, vim.bo.filetype)
       end
 
       ---@diagnostic disable-next-line: undefined-field
@@ -84,13 +84,7 @@ return {
           lualine_a = { { 'mode', separator = { left = '' }, right_padding = 1, cond = has_mode } },
           lualine_b = { { 'filename', cond = has_mode } },
           lualine_c = { { 'diagnostics', cond = has_mode } },
-          lualine_x = {
-            function()
-              return vim.lsp.client.name
-            end,
-            icon = ' LSP:',
-            color = { fg = '#ffffff', gui = 'bold' },
-          },
+          lualine_x = {},
           lualine_y = { 'filetype' },
           lualine_z = {
             { 'progress', separator = { right = '' }, left_padding = 1 },
@@ -110,35 +104,17 @@ return {
     end,
   },
 
-  -- {
-  --   'nvim-lualine/lualine.nvim',
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     require('lualine').setup {
-  --       options = {
-  --         theme = 'catppuccin',
-  --         globalstatus = true,
-  --         component_separators = { left = '', right = '' },
-  --         section_separators = { left = '█', right = '█' },
-  --       },
-  --       sections = {
-  --         lualine_b = {
-  --           'diff',
-  --           'diagnostics',
-  --         },
-  --         lualine_c = {
-  --           { 'filename', path = 1 },
-  --         },
-  --         lualine_x = {
-  --           'filetype',
-  --         },
-  --       },
-  --     }
-  --   end,
-  -- },
-  --
-
-  { 'akinsho/toggleterm.nvim', version = '*', config = true },
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    config = function()
+      require('toggleterm').setup {
+        float_opts = {
+          border = 'rounded',
+        },
+      }
+    end,
+  },
 
   {
     'iamcco/markdown-preview.nvim',

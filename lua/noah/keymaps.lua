@@ -77,6 +77,14 @@ nset('<leader>q', '<cmd>q<cr>', { silent = false })
 -- Save and Quit with leader key
 nset('<leader>z', '<cmd>wq<cr>', { silent = false })
 
+-- Toggle floating term
+nset('<leader>tt', '<cmd>exe v:count1 . "ToggleTerm direction=float"<cr>', { silent = true })
+
+-- Cargo build and run
+nset('<leader>tc', function()
+  require('toggleterm').exec 'clear && cargo b && cargo r'
+end, { silent = true })
+
 -- Diagnostic keymaps
 
 -- Goto next diagnostic of any severity
